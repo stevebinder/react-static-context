@@ -6,7 +6,7 @@ In the following example we create a static context **MyStaticContext** and use 
 
 ```
 import { render } from 'react-dom';
-import createStaticContext from 'react-static-context';
+import { createStaticContext, withStaticContext } from 'react-static-context';
 
 const MyStaticContext = createStaticContext((state, setState) => ({
 
@@ -18,35 +18,22 @@ const MyStaticContext = createStaticContext((state, setState) => ({
 
 }));
 
-const MyComponent = ({ addValue, values }) => (
+const MyComponent = ({ addValue, name, values }) => (
   <div>
+    <h1>Hello {name}</h1>
     <p>The current values are {values.join(',')}</p>
     <button onClick={() => addValue(4)}>Add</button>
   </div>
 );
 
-const MyWrappedComponent1 = props => (
-  <MyStaticContext>
-  {({ addValue, values }) => (
-    <MyComponent
-      {...props}
-      addValue={addValue}
-      values={values}
-    />
-  )}
-  </MyStaticContext>
-);
-
-const MyWrappedComponent2 = props => (
-  <MyStaticContext>
-  {({ addValue, values }) => (
-    <MyComponent
-      {...props}
-      addValue={addValue}
-      values={values}
-    />
-  )}
-  </MyStaticContext>
+const MyContainer = withStaticContext(
+  MyComponent,
+  MyStaticContext,
+  (context, props) => ({
+    addValue: context.addValue,
+    name: props.name,
+    values: context.values,
+  }),
 );
 
 render(

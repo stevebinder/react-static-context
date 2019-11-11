@@ -1,6 +1,6 @@
 {
   "name": "react-static-context",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Create a static context for use with React.",
   "main": "index.js",
   "license": "ISC",
