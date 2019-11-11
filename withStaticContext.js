@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-export default (Component, Context, getter) => {
+export default (Context, getter, Component) => {
   const creator = typeof getter === 'function'
     ? (c, p) => getter(c, p)
     : c => getter.reduce(
