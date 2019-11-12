@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 
-export default creator => {
+export default (creator, initializer = null) => {
 
   let initialized = false;
   const listeners = [];
@@ -47,6 +47,9 @@ export default creator => {
       if (!initialized) {
         initialized = true;
         updateState(createState(this));
+        if (initializer) {
+          setTimeout(() => initializer(stateValue, setState, this.props));
+        }
       }
       addListener(this);
     }
