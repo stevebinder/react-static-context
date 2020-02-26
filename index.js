@@ -1,6 +1,7 @@
-import defaultMethod from './createStaticContext';
-export const createStaticContext = defaultMethod;
+import createStaticContextDefault from './createStaticContext';
+export const createStaticContext = createStaticContextDefault;
 
-export withStaticContext from './withStaticContext';
+import withStaticContextDefault from './withStaticContext';
+export const withStaticContext = withStaticContextDefault;
 
 export default createStaticContext;
