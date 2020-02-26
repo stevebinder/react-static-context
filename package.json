@@ -1,23 +1,23 @@
 {
   "description": "Create a static context for use with React.",
   "dependencies": {
+    "react": "*"
+  },
+  "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
     "babel-loader": "^8.0.6",
     "babel-preset-next": "^1.2.0",
-    "react": "*"
-  },
-  "devDependencies": {
     "webpack": "^3.0.0"
   },
+  "files": "bundle.js",
   "license": "ISC",
-  "main": "dist/bundle.js",
+  "main": "bundle.js",
   "name": "react-static-context",
   "scripts": {
-    "build": "rm -rf dist && NODE_ENV=production webpack -p --progress --colors --display-modules --sort-modules-by size",
-    "postinstall": "npm run build"
+    "build": "rm -rf dist && NODE_ENV=production webpack -p --progress --colors --display-modules --sort-modules-by size"
   },
   "version": "1.4.0"
 }
