@@ -8,18 +8,10 @@ export default (creator, initializer = null) => {
 
   const addListener = obj => listeners.push(obj);
 
-  const createState = component => {
-    const propsGetterObj = {
-      get getter() {
-        return component.props;
-      }
-    };
-    return creator(
-      stateValue,
-      setState,
-      propsGetterObj.getter,
-    );
-  };
+  const createState = component => creator(
+    stateValue,
+    setState,
+  );
 
   const removeListener = obj => listeners.splice(
     listeners.findIndex(item => item === obj),
@@ -40,17 +32,35 @@ export default (creator, initializer = null) => {
   const updateState = changes =>
     Object.entries(changes).forEach(([key, value]) => stateValue[key] = value);
 
-  return class extends PureComponent {
+  class SC extends PureComponent {
 
     constructor(props) {
       super(props);
       if (!initialized) {
         initialized = true;
-        updateState(createState(this));
+        const createdState = createState(this);
+        updateState(createdState);
+        Object.entries(createdState).forEach(([key, value]) => {
+          if (typeof value === 'function') {
+            SC[key] = value;
+          } else {
+            Object.defineProperty(
+              SC,
+              key,
+              {
+                get: () => stateValue[key],
+                set: v => stateValue[key] = v,
+              },
+            );
+          }
+        });
         if (initializer) {
-          setTimeout(() => initializer(stateValue, setState, this.props));
+          setTimeout(() => initializer(stateValue, setState));
         }
       }
+    }
+
+    componentDidMount() {
       addListener(this);
     }
 
@@ -64,4 +74,8 @@ export default (creator, initializer = null) => {
         : this.props.children;
     }
   }
+
+  new SC();
+
+  return SC;
 }
