@@ -38,5 +38,5 @@
   "scripts": {
     "build": "rm -rf dist && NODE_ENV=production webpack -p --progress --colors --display-modules --sort-modules-by size"
   },
-  "version": "1.5.1"
+  "version": "1.5.2"
 }
