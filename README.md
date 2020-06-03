@@ -1,46 +1,73 @@
+React applications often have one or many **stores** in addition to **actions** which manipulate that store. This usually consists of a higher provider wrapping consumers at lower levels who access the store or dispatch actions. Utility files and consumers nested outside the provider as often unable to acess the store or dispatch actions which leads to complicated issues.
 
+The package outlined below provides a collection of methods that stand up a static store which can be accessed via HOC or plain object reference. In this way the store is reduced to a basic state/setState api which is familiar to react developers.
 
-Often in React applications we want to create a **global context** or **store** which is initialized once and can be referenced from anywhere in the app without using providers (a singleton). The **createStaticContext** method allows us to create a HOC to reference a static context without any provider/consumer pattern. It is most helpful as a global store for an application, or section of an application.
+In the following example we create a static context with **createStaticContext** and use it to provide references to a component:
 
-In the following example we create a static context **MyStaticContext** and use it to wrap two components. When either component calls **addValue**, both components will update because they reference the same context. Remember, the context is only initialized once per application which allows us to use it as a global store.
-
-```
-import { render } from 'react-dom';
-import { createStaticContext, withStaticContext } from 'react-static-context';
+```js
+import { createStaticContex } from 'react-static-context';
 
 const MyStaticContext = createStaticContext((state, setState) => ({
-
-  values: [1, 2, 3],
-
-  addValue: value => setState({
-    values: [...state.values, value],
-  }),
-
+  age: 30,
+  increaseAge: years => setState({ age: state.age + years }),
 }));
 
-const MyComponent = ({ addValue, name, values }) => (
-  <div>
-    <h1>Hello {name}</h1>
-    <p>The current values are {values.join(',')}</p>
-    <button onClick={() => addValue(4)}>Add</button>
-  </div>
+const MyComponent = ({ age, increaseAge, name }) => (
+  <MyStaticContext>
+  {context => (
+    <div>
+      <h1>Hello {name}!</h1>
+      <p>Current age: {age}</p>
+      <button onClick={() => increaseAge(1)}>
+        Add 2
+      </button>
+    </div>
+  )}
+  </MyStaticContext>
 );
+```
 
-const MyContainer = withStaticContext(
+Furthermore we can make this example more performant by using **withStaticContext** which wraps our component with PureComponent shallow comparison logic while also allowing us to pass references from our context:
+
+```js
+import { withStaticContext } from 'react-static-context';
+
+withStaticContext(
   MyComponent,
   MyStaticContext,
   (context, props) => ({
-    addValue: context.addValue,
+    age: context.age,
+    increaseAge: context.increaseAge,
     name: props.name,
-    values: context.values,
   }),
 );
-
-render(
-  document.getElementById('root'),
-  <div>
-    <MyComponent1 />
-    <MyComponent2 />
-  </div>
-);
 ```
+
+We can also access the store from areas outside of React components:
+
+```js
+import MyStaticContext from './MyStaticContext';
+
+const getCurrentAge = () => {
+  const age = MyStaticContext.age;
+  alert(`Current age is ${age}`);
+};
+```
+
+
+Lastly, we can initilize our store with values if need be:
+
+```js
+import { createStaticContext } from 'react-static-context';
+
+const MyStaticContext = createStaticContext(
+  (state, setState) => ({
+    age: 30,
+    name: 'Bob',
+  }),
+  (state, setState) => {
+    setState({
+      age: state.age + 1,
+    });
+  },
+);
