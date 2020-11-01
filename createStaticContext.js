@@ -1,4 +1,5 @@
 import { PureComponent } from 'react';
+import withStaticContext from './withStaticContext';
 
 export default (creator, initializer = null) => {
 
@@ -40,6 +41,7 @@ export default (creator, initializer = null) => {
         initialized = true;
         const createdState = createState(this);
         updateState(createdState);
+        SC.with = (...args) => withStaticContext(args[0], SC, ...args.slice(1));
         Object.entries(createdState).forEach(([key, value]) => {
           if (typeof value === 'function') {
             SC[key] = value;
