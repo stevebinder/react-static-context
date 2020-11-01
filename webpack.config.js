@@ -7,7 +7,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     libraryTarget: 'commonjs2',
-    path: `${__dirname}`,
+    path: `${__dirname}/dist`,
   },
   module: {
     loaders: [
