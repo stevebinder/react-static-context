@@ -29,7 +29,7 @@ const isEqual = (a, b) => {
   return false;
 };
 
-const createHOC = (Context, getter, Component) => {
+const createHOC = (Component, Context, getter) => {
   const creator = typeof getter === 'function'
     ? (c, p) => getter(c, p)
     : c => getter.reduce(
