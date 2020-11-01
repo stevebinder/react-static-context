@@ -12,7 +12,7 @@
     "babel-preset-next": "^1.2.0",
     "webpack": "^3.0.0"
   },
-  "files": ["./dist/"],
+  "files": ["bundle.js"],
   "keywords": [
     "action",
     "actions",
@@ -33,11 +33,10 @@
     "stores"
   ],
   "license": "ISC",
-  "main": "dist/bundle.js",
+  "main": "bundle.js",
   "name": "react-static-context",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p --progress --colors --display-modules --sort-modules-by size",
-    "postinstall": "npm run build"
+    "build": "NODE_ENV=production webpack -p --progress --colors --display-modules --sort-modules-by size"
   },
-  "version": "1.6.0"
+  "version": "1.6.1"
 }
